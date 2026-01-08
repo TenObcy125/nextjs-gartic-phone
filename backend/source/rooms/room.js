@@ -5,6 +5,7 @@ class Room {
     constructor() {
         this.room_code = generate_room_code();
         this.players = [];
+        this.host_socket_id = null;
     }
     join(player)
     {
@@ -12,7 +13,11 @@ class Room {
         {
             console.log('player joined room ' + this.room_code)
             this.players.push(player);
-            this.someone_joined();
+            if (this.players.length == 1)
+            {
+                this.set_host(player.socket_id);
+            }
+            this.broadcast_player_list();
         }
         else
         {
@@ -20,16 +25,27 @@ class Room {
         }
         console.log(this.players);
     }
-    someone_joined()
+    exit(socket_id)
+    {
+        this.players = this.players.filter(p => p.socket_id !== socket_id);
+        console.log(socket_id, 'exited')
+    }
+    broadcast_player_list()
     {
         const io = get_io();
         io.to(this.room_code).emit("player_list", this.players);
+    }
+    set_host(socket_id)
+    {
+        this.host_socket_id = socket_id;
+        const target_player = this.players.find(p => p.socket_id === socket_id);
+        target_player.is_host = true;
     }
 }
 
 const get_random_name = () => {
     const usernames = [
-        "Peter", "Goblin", "Magma", "Miner", "Piotr Wawrzyk", "keram",
+        "Peter", "Goblin", "Magma", "Miner", "Piotr Wawrzyk", "keram", "OG", "Santa", "Wheelyyyy", "Lil jew"
     ]
     const random = Math.floor(Math.random() * usernames.length);
     return usernames[random];
@@ -39,6 +55,7 @@ class Player {
     constructor(socket_id) {
         this.socket_id = socket_id;
         this.username = get_random_name();
+        this.is_host = false;
     }
 }
 

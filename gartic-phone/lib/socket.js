@@ -4,7 +4,8 @@ let socket;
  
 export const connectSocket = () => {
   // Replace with your backend server URL
-  socket = io('ws://172.16.38.225:5000', {
+  // ip (szkoła ws://172.16.38.225:5000)
+  socket = io('ws://localhost:5000', {
     transports: ['websocket', 'polling'],
     reconnection: true,
     reconnectionAttempts: 5,

@@ -1,6 +1,5 @@
-const generate_room_code = require("../room_code");
 const { Room, Player } = require("./room");
-const {room_map} = require("./room_map");
+const room_map = require("./room_map");
 
 const rooms_handle_socket = (socket) => {
 
@@ -8,18 +7,37 @@ const rooms_handle_socket = (socket) => {
         console.log(data);
         const new_room = new Room();
         const new_player = new Player(socket.id)
-        new_room.join(new_player);
         const room_code = new_room.room_code;
-        socket.emit('room_created',  room_code)
         socket.join(new_room.room_code);
+        
+        new_room.join(new_player);
+        socket.emit('room_created',  room_code)
+        
+        new_room.set_host(socket.id)
         room_map.set(new_room.room_code, new_room);
     })
     socket.on('join', (data) => {
+        console.log('join')
         const room_code = data;
-        const destination = room_map.find(room => room.room_code == room_code);
-        const new_player = new Player(socket.id)
-
-        destination.join(new_player);
+        if (!room_map.has(room_code))
+        {
+            console.log('nie znaleziono lobby')
+            socket.emit('join_result', false)
+            return;
+        }
+        else
+        {
+            const destination = room_map.get(room_code);
+            console.log(destination);
+            const new_player = new Player(socket.id)
+            socket.join(room_code);
+            destination.join(new_player);
+            socket.emit('join_result', true);
+        }
+    })
+    socket.on('exit', (room_code) => {
+        const destination = room_map.get(room_code);
+        destination.exit(socket.id);
     })
 
 }
