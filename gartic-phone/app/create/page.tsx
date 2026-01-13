@@ -4,6 +4,8 @@ import Image from "next/image"
 import { Link, Crown, Trash } from "lucide-react"
 import { useEffect, useState } from "react";
 import { getSocket } from '@/lib/socket';
+import { toast } from "react-toastify";
+import PageTransition from "@/components/PageTransition";
 
 function PlayerRow({ username, isOwner }: any) {
   return (
@@ -42,8 +44,15 @@ export default function CreateRoomPage() {
         return () => socket.off("room_created", handleHello);
       }, []);
 
+      const handleCopy = () => {
+        navigator.clipboard.writeText(code);
+        copyToast();
+      }
+      const copyToast = () => toast.success('Kod skopiowany!', {position: 'bottom-right'})
+
     return (
-        <div>
+        <PageTransition>
+          <div>
             <div className="w-full h-screen flex items-center justify-center select-none">
                <div className="w-[800px] h-[400px] flex rounded-lg shadow-lg overflow-hidden">
                  <div className="w-1/2 p-6 flex flex-col justify-center">
@@ -54,7 +63,7 @@ export default function CreateRoomPage() {
                     </p>
                     <div className="w-full flex items-center">
                       <input value={code} disabled className="w-40 h-8 input outline-none" type="text" placeholder="Kod gry" maxLength={6} />
-                      <button className="btn ml-2">Kopiuj! <Link className="ml-3" size={16}/></button>
+                      <button onClick={handleCopy} className="btn ml-2">Kopiuj! <Link className="ml-3" size={16}/></button>
                     </div>
                    </div>
                    <div className="h-full w-full flex items-end">
@@ -71,5 +80,6 @@ export default function CreateRoomPage() {
                </div>
              </div>
         </div>
+        </PageTransition>
     )
 }

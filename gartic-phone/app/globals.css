@@ -2,3 +2,12 @@
 @plugin "daisyui" {
   themes: light --default;
 }
+
+@layer {
+  .easel {
+    @apply shadow-xl
+  }
+  .pensize {
+    @apply range w-64
+  }
+}
