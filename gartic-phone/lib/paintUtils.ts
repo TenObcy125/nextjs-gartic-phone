@@ -3,9 +3,6 @@ export function renderCanvas(canvas: HTMLCanvasElement) {
   console.log(dataURL);
 }
 
-/**
- * Konwertuje canvas na plik i wysyła do backendu
- */
 export async function uploadCanvas(canvas: HTMLCanvasElement) {
   const blob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob((b) => resolve(b), "image/png")

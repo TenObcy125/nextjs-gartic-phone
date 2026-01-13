@@ -15,10 +15,8 @@ export default function PageTransition({ children, text = "Stwórz grę!" }: Pag
 
   useEffect(() => {
     const runAnimation = async () => {
-      // 1️⃣ Overlay wjeżdża z góry
       await overlayControls.start({ y: "0%", transition: { duration: 0.7, ease: "easeInOut" } });
 
-      // 2️⃣ Tekst bounce
       await textControls.start({
         y: [0, -50, 0, -20, 0],
         scale: [1, 1.3, 1, 1.15, 1],
@@ -26,10 +24,8 @@ export default function PageTransition({ children, text = "Stwórz grę!" }: Pag
         transition: { duration: 1.5, times: [0, 0.25, 0.5, 0.75, 1], ease: [0.68, -0.55, 0.27, 1.55] },
       });
 
-      // 3️⃣ Overlay zjeżdża w dół po zakończeniu bounce
       await overlayControls.start({ y: "100%", transition: { duration: 0.7, ease: "easeInOut" } });
 
-      // 4️⃣ Usuń overlay
       setShowOverlay(false);
     };
 
@@ -55,7 +51,6 @@ export default function PageTransition({ children, text = "Stwórz grę!" }: Pag
         </motion.div>
       )}
 
-      {/* Treść strony pojawia się dopiero po zniknięciu overlay */}
       {!showOverlay && <div className="w-full h-full">{children}</div>}
     </div>
   );

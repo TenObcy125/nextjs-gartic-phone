@@ -39,14 +39,12 @@ if (typeof window !== "undefined") {
   });
 }
 
-/* ========= API ========= */
-
 export function isKeyPressed(key: string) {
   return pressedKeys.has(key);
 }
 
 export function isMouseDown(button: number = 0) {
-  // 0 = lewy, 1 = środkowy, 2 = prawy
+
   return mouseButtons.has(button);
 }
 

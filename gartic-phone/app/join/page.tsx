@@ -15,7 +15,7 @@ export default function Home() {
   const handleJoin = () => {
     const socket = getSocket();
 
-    setShowPopup(true); // 👈 pokaz popup
+    setShowPopup(true);
     socket.emit('join', code);
 
     //router.push(`/play/${code}`);
@@ -27,7 +27,7 @@ export default function Home() {
     socket.emit("create_room_req", true);
 
     socket.on("game_started", () => {
-      setShowPopup(true); // 👈 zamknij popup po starcie gry
+      setShowPopup(true); 
     });
 
     return () => {
@@ -40,7 +40,6 @@ export default function Home() {
       <div className="w-full h-screen flex items-center justify-center">
         <div className="w-[800px] h-[400px] flex rounded-lg shadow-lg overflow-hidden">
           
-          {/* LEWA STRONA */}
           <div className="w-1/2 p-6 flex flex-col justify-center">
             <h1 className="font-bold text-4xl mb-4">Dołącz do Gry</h1>
             <p className="text-gray-600">
@@ -63,7 +62,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* PRAWA STRONA */}
           <div className="relative w-1/2 h-full">
             <Image
               src="/bg.jpg"
@@ -75,7 +73,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* POPUP */}
       {showPopup && (
         <dialog className="modal modal-open">
           <div className="modal-box flex flex-col items-center gap-4">
