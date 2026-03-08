@@ -6,7 +6,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 
 const fileRoutes = require('./api/fileRoutes.js');
-
+const PORT = 5000;
 const generate_room_code = require("./source/room_code.js");
 const rooms_handle_socket = require("./source/rooms/handle_socket.js");
 const { set_io } = require("./io.js");
@@ -37,6 +37,6 @@ io.on("connection", (socket) => {
 });
 
 /* ===== START ===== */
-server.listen(process.env.PORT, () => {
-    console.log(`Server listening at http://localhost:${process.env.PORT}`);
+server.listen(PORT, () => {
+    console.log(`Server listening at http://localhost:${PORT}`);
 });

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 export default function useCanvas(
-  ref: React.RefObject<HTMLCanvasElement>,
+  ref: React.RefObject<HTMLCanvasElement | null>,
   callback: (
     ctx: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement

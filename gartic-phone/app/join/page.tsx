@@ -29,16 +29,19 @@ export default function Home() {
     socket.on("game_started", () => {
       setShowPopup(true); 
     });
+    socket.once('game_has_started', (data: string) => {
+      console.log('game has started')
+      router.push(`/play/${data}`);
+    })
 
     return () => {
       socket.off("game_started");
     };
   }, []);
-
   return (
     <PageTransition text="Dołącz do gry">
       <div className="w-full h-screen flex items-center justify-center">
-        <div className="w-[800px] h-[400px] flex rounded-lg shadow-lg overflow-hidden">
+        <div className="w-200 h-100 flex rounded-lg shadow-lg overflow-hidden">
           
           <div className="w-1/2 p-6 flex flex-col justify-center">
             <h1 className="font-bold text-4xl mb-4">Dołącz do Gry</h1>

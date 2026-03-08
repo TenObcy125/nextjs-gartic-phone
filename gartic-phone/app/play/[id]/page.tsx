@@ -11,12 +11,14 @@ import {
 import { HexColorPicker } from "react-colorful";
 import PaintToolBar from "@/components/PaintToolBar";
 import { renderCanvas, uploadCanvas } from "@/lib/paintUtils";
+import { getSocket } from "@/lib/socket";
 
 export default function Paint() {
   const [color, setColor] = useState("#000000");
   const [penSize, setPenSize] = useState(16);
+  const [phase_type, set_phase_type] = useState('text');
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const lastX = useRef(0);
   const lastY = useRef(0);
@@ -37,6 +39,7 @@ export default function Paint() {
     }
   };
 
+
   useEffect(() => {
     addShortcut(["Control", "z"], () => {
       const canvas = canvasRef.current;
@@ -46,6 +49,10 @@ export default function Paint() {
       const last = history.current.pop()!;
       ctx.putImageData(last, 0, 0);
     });
+    const socket = getSocket();
+    socket.on('next_phase', (data) => {
+      set_phase_type(data.type);
+    })
   }, []);
 
   useCanvas(canvasRef, (ctx, canvas) => {
@@ -66,9 +73,9 @@ export default function Paint() {
     lastX.current = x;
     lastY.current = y;
   });
-
-  return (
-    <div className="flex flex-col items-center justify-center w-full h-screen">
+  const Canvas_component = () => {
+    return (
+      <div>
       <div className="w-full mb-10">
         <p className="w-full text-center">HASŁO</p>
         <h1 className="w-full text-4xl font-bold text-center">SANTA</h1>
@@ -86,8 +93,8 @@ export default function Paint() {
           className="
             easel
             block
-            w-[800px]
-            h-[500px]
+            w-200
+            h-125
             border
             border-neutral-400
           "
@@ -119,6 +126,29 @@ export default function Paint() {
           </button>
         </div>
       </div>
+      </div>
+    )
+  }
+  const Input_component = () => {
+    return (
+      <div className="flex items-center justify-center w-[80%] flex-col">
+        <h1>Opisz jakąś sytuacje</h1>
+        <div className="flex w-full items-center">
+          <input className="w-full h-full m-2 border rounded-xl pl-10"></input>
+          <button className="btn">Potwierdź</button>
+        </div>
+      </div>
+    )
+  }
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-screen">
+      {
+        phase_type == 'text'
+        ?
+        <Input_component />
+        :
+        <Canvas_component></Canvas_component>
+      }
     </div>
   );
 }

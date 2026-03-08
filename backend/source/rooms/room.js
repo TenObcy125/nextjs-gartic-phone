@@ -1,11 +1,15 @@
 const { get_io } = require("../../io");
 const generate_room_code = require("../room_code");
+const regular_round_scheme = require("../round_schemes/regular");
 
 class Room {
     constructor() {
         this.room_code = generate_room_code();
         this.players = [];
         this.host_socket_id = null;
+        this.is_running = false;
+        this.text_time = 5; //[s]
+        this.draw_time = 60; //[s]
     }
     join(player)
     {
@@ -40,6 +44,19 @@ class Room {
         this.host_socket_id = socket_id;
         const target_player = this.players.find(p => p.socket_id === socket_id);
         target_player.is_host = true;
+    }
+    start_game()
+    {
+        if(this.players.length > 1)
+        {
+            this.is_running = true;
+            console.log('start_game')
+            regular_round_scheme(this);
+        }
+        else
+        {
+            console.log("not enough people to start");
+        }
     }
 }
 

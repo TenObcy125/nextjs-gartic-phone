@@ -13,11 +13,12 @@ export default function PaintToolBar({ penSize, setPenSize }: ToolBar) {
                     </p>
 
                     <input
-                        onInput={(e) => setPenSize(Number((e.target as HTMLInputElement).value))}
+                        value={penSize}
+                        onChange={(e) => setPenSize(Number(e.target.value))}
                         className="pensize"
                         type="range"
-                        min="0"
-                        max="30"
+                        min="1"
+                        max="50"
                     />
                 </div>
             </div>
