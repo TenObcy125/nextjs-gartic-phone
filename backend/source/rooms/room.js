@@ -8,7 +8,7 @@ class Room {
         this.players = [];
         this.host_socket_id = null;
         this.is_running = false;
-        this.text_time = 5; //[s]
+        this.text_time = 15; //[s]
         this.draw_time = 60; //[s]
     }
     join(player)

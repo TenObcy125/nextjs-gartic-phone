@@ -26,8 +26,20 @@ function getFiles(req, res) {
     });
 }
 
+function getImage(req, res) {
+    const safe_name = path.basename(req.params.filename);
+    const file_path = path.join(uploadsDir, safe_name);
+
+    if (!fs.existsSync(file_path)) {
+        return res.status(404).json({ error: 'File not found' });
+    }
+
+    return res.sendFile(file_path);
+}
+
 module.exports = {
     upload,
     uploadFile,
-    getFiles
+    getFiles,
+    getImage
 };

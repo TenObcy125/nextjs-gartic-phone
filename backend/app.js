@@ -6,6 +6,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 
 const fileRoutes = require('./api/fileRoutes.js');
+const results_routes = require('./api/results.js');
 const PORT = 5000;
 const generate_room_code = require("./source/room_code.js");
 const rooms_handle_socket = require("./source/rooms/handle_socket.js");
@@ -28,6 +29,8 @@ app.get("/api/status", (req, res) => {
 
 app.post('/api/upload', fileRoutes.upload.single("file"), fileRoutes.uploadFile);
 app.get('/api/files', fileRoutes.getFiles);
+app.get('/api/images/:filename', fileRoutes.getImage);
+app.use('/api', results_routes);
 
 io.on("connection", (socket) => {
     console.log("connected:", socket.id);
